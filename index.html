@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación e Impuestos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Facturacion.css">
+</head>
+
+<body>
+    <nav class="barra-navegacion">
+        <ul>
+            <li><a href="#" id="btnInicio" class="item-enlace" onclick="mostrarSeccion('sec-inicio', this)">Inicio</a>
+            </li>
+            <li><a href="#" class="item-enlace" onclick="mostrarSeccion('sec-simulador', this)">Simulador</a></li>
+            <li><a href="#" class="item-enlace" onclick="mostrarSeccion('sec-tabla', this)">Tabla del IVA</a></li>
+            <li><a href="#" class="item-enlace" onclick="mostrarSeccion('sec-fundamentos', this)">Fundamentos</a></li>
+            <li><a href="#" class="item-enlace" onclick="mostrarSeccion('sec-evaluacion', this)">Evaluación</a></li>
+            <li><a href="#" class="item-enlace" onclick="cerrarSesion()">Cerrar Sesión</a></li>
+            <div id="indicadorNeon" class="indicador-neon"></div>
+        </ul>
+    </nav>
+
+    <main class="contenedor-contenido">
+        <section id="sec-inicio" class="seccion-pagina">
+            <header class="seccion-principal">
+                <div class="etiqueta-principal">Herramienta Financiera</div>
+                <h1>Gestión de Facturación <span class="texto-brillante">e Impuestos</span></h1>
+                <p>Domina los conceptos clave y simula tus comprobantes electrónicos con precisión y seguridad.</p>
+            </header>
+
+            <h2 class="subtitulo-seccion">Conceptos Clave</h2>
+            <div class="cuadricula-informacion">
+                <div class="tarjeta-cristal interactiva" onclick="abrirModalInformacion('iva')">
+                    <h3 class="titulo-tarjeta">¿Qué es el IVA?</h3>
+                    <p>El Impuesto al Valor Agregado grava el valor transferido a bienes y servicios. Clic para ver
+                        detalles legales.</p>
+                </div>
+
+                <div class="tarjeta-cristal interactiva" onclick="abrirModalInformacion('base')">
+                    <h3 class="titulo-tarjeta">Base Imponible</h3>
+                    <p>Es el monto exacto sobre el cual se calcula el porcentaje de impuesto a pagar. Clic para ampliar
+                        definición.</p>
+                </div>
+
+                <div class="tarjeta-cristal interactiva" onclick="abrirModalInformacion('agente')">
+                    <h3 class="titulo-tarjeta">Agente de Retención</h3>
+                    <p>Persona o empresa designada por la ley para retener parte del impuesto. Clic para conocer
+                        obligaciones.</p>
+                </div>
+            </div>
+
+            <h2 class="subtitulo-seccion">Tipos de Comprobantes</h2>
+            <div class="cuadricula-informacion">
+                <div class="tarjeta-cristal interactiva" onclick="abrirModalInformacion('comprobantes')">
+                    <h3 class="titulo-tarjeta">Comprobantes de Pago</h3>
+                    <p>Documentos que acreditan transferencias de bienes o servicios. Clic para ver clasificaciones.</p>
+                </div>
+
+                <div class="tarjeta-cristal interactiva" onclick="abrirModalInformacion('fisica')">
+                    <h3 class="titulo-tarjeta">Factura Física</h3>
+                    <p>Comprobante de pago tradicional emitido en formato de papel. Clic para ver requisitos de validez.
+                    </p>
+                </div>
+
+                <div class="tarjeta-cristal interactiva" onclick="abrirModalInformacion('electronica')">
+                    <h3 class="titulo-tarjeta">Factura Electrónica</h3>
+                    <p>Documento digital legalmente válido respaldado por el SRI. Clic para ver ventajas tecnológicas.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-simulador" class="seccion-pagina">
+            <div class="tarjeta-cristal tarjeta-formulario">
+                <div class="cabecera-formulario">
+                    <h2>Módulos de Simulación Complementarios</h2>
+                    <p>Calcula retenciones, desglose de impuestos, notas de crédito e intereses por mora.</p>
+                </div>
+
+                <div class="alternador-simuladores">
+                    <button type="button" id="btnModDesglose" class="btn-alternador activo"
+                        onclick="mostrarModuloSimulador('formDesglose', this)">Desglose IVA</button>
+                    <button type="button" id="btnModRetencion" class="btn-alternador"
+                        onclick="mostrarModuloSimulador('formRetencion', this)">Retención</button>
+                    <button type="button" id="btnModNota" class="btn-alternador"
+                        onclick="mostrarModuloSimulador('formNota', this)">Nota Crédito</button>
+                    <button type="button" id="btnPagoIntereses" class="btn-alternador"
+                        onclick="mostrarModuloSimulador('formIntereses', this)">Intereses Mora</button>
+                </div>
+
+                <div id="formDesglose" class="formulario-simulador activa-modulo">
+                    <div class="grupo-entrada">
+                        <label>Valor Total a Pagar ($)</label>
+                        <input type="number" id="txtTotalDesglose" placeholder="Ej: 115.00" class="entrada-neon"
+                            step="0.01" min="0.01" max="100000">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label>Tarifa de IVA Aplicada</label>
+                        <select id="selIvaDesglose" class="entrada-neon">
+                            <option value="0.15">IVA 15%</option>
+                            <option value="0.0">IVA 0%</option>
+                        </select>
+                    </div>
+                    <div id="errDesglose" class="mensaje-error"></div>
+                    <button type="button" class="boton-primario" onclick="calcularDesglose()">Calcular Desglose</button>
+
+                    <div id="resultadoDesglose" class="panel-resultado">
+                        <p>Subtotal Original: $<span id="lblDesgloseSubtotal">0.00</span></p>
+                        <p>IVA Extraído: $<span id="lblDesgloseIva">0.00</span></p>
+                        <h3>Total Verificado: $<span id="lblDesgloseTotal">0.00</span></h3>
+                    </div>
+                </div>
+
+                <div id="formRetencion" class="formulario-simulador">
+                    <div class="grupo-entrada">
+                        <label>Monto Base de Operación ($)</label>
+                        <input type="number" id="txtMontoBase" placeholder="Ej: 500.00" class="entrada-neon" step="0.01"
+                            min="0.01" max="100000">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label>Retención Impuesto a la Renta</label>
+                        <select id="selRenta" class="entrada-neon">
+                            <option value="0.0175">1.75% (Adquisición de Bienes)</option>
+                            <option value="0.0275">2.75% (Servicios Generales)</option>
+                            <option value="0.10">10.00% (Honorarios Profesionales)</option>
+                            <option value="0.0">0.00% (Sin Retención)</option>
+                        </select>
+                    </div>
+                    <div class="grupo-entrada">
+                        <label>Retención de IVA</label>
+                        <select id="selIvaRet" class="entrada-neon">
+                            <option value="0.30">30% (Bienes)</option>
+                            <option value="0.70">70% (Servicios)</option>
+                            <option value="1.00">100% (Honorarios / Arriendos)</option>
+                            <option value="0.0">0% (Sin Retención)</option>
+                        </select>
+                    </div>
+                    <div id="errRetencion" class="mensaje-error"></div>
+                    <button type="button" class="boton-primario" onclick="calcularRetencion()">Calcular
+                        Retenciones</button>
+
+                    <div id="resultadoRetencion" class="panel-resultado">
+                        <p>Retención de Renta: $<span id="lblRetencionRenta">0.00</span></p>
+                        <p>Retención de IVA: $<span id="lblRetencionIva">0.00</span></p>
+                        <h3>Total a Retener: $<span id="lblRetencionTotal">0.00</span></h3>
+                        <h4 style="margin-top: 10px; color: #cbd5e1;">Monto Neto a Pagar: $<span
+                                id="lblRetencionNeto">0.00</span></h4>
+                    </div>
+                </div>
+
+                <div id="formNota" class="formulario-simulador">
+                    <div class="grupo-entrada">
+                        <label>Valor Total Original de Factura ($)</label>
+                        <input type="number" id="txtValorOriginal" placeholder="Ej: 250.00" class="entrada-neon"
+                            step="0.01" min="0.01" max="100000">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label>Monto a Modificar o Anular ($)</label>
+                        <input type="number" id="txtValorModificar" placeholder="Ej: 50.00" class="entrada-neon"
+                            step="0.01" min="0.01" max="100000">
+                    </div>
+                    <div id="errNota" class="mensaje-error"></div>
+                    <button type="button" class="boton-primario" onclick="calcularNota()">Aplicar Nota de
+                        Crédito</button>
+
+                    <div id="resultadoNota" class="panel-resultado">
+                        <p>Monto de Ajuste: $<span id="lblNotaAjuste">0.00</span></p>
+                        <h3>Nuevo Total Modificado: $<span id="lblNotaNuevoTotal">0.00</span></h3>
+                    </div>
+                </div>
+
+                <div id="formIntereses" class="formulario-simulador">
+                    <div class="grupo-entrada">
+                        <label>Impuesto Vencido a Pagar ($)</label>
+                        <input type="number" id="txtImpuestoVencido" placeholder="Ej: 150.00" class="entrada-neon"
+                            step="0.01" min="0.01" max="100000">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label>Meses de Atraso</label>
+                        <input type="number" id="txtMesesAtraso" placeholder="Ej: 3" class="entrada-neon" step="1"
+                            min="1" max="100000">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label>Tasa de Interés Mensual Referencial (%)</label>
+                        <input type="number" id="txtTasaInteres" placeholder="Ej: 0.75" class="entrada-neon" step="0.01"
+                            value="0.75" min="0" max="100">
+                    </div>
+                    <div class="grupo-entrada">
+                        <label>Multa por Mes de Atraso (%)</label>
+                        <input type="number" id="txtTasaMulta" placeholder="Ej: 3.0" class="entrada-neon" step="0.1"
+                            value="3.0" min="0" max="100">
+                    </div>
+                    <div id="errIntereses" class="mensaje-error"></div>
+                    <button type="button" class="boton-primario" onclick="calcularIntereses()">Calcular Valores en
+                        Mora</button>
+
+                    <div id="resultadoIntereses" class="panel-resultado">
+                        <p>Interés Acumulado: $<span id="lblInteresGenerado">0.00</span></p>
+                        <p>Multa Acumulada: $<span id="lblMultaGenerada">0.00</span></p>
+                        <h3>Total a Pagar (Impuesto + Recargos): $<span id="lblInteresesTotal">0.00</span></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tarjeta-cristal contenedor-historial">
+                <div class="cabecera-formulario">
+                    <h2>Panel de Historial</h2>
+                    <p>Registro local de los cálculos procesados en esta sesión.</p>
+                </div>
+                <table class="tabla-cristal" id="tablaHistorial">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Trámite</th>
+                            <th>Base / Subtotal</th>
+                            <th>Valor Impuesto / Ajuste</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoHistorial">
+                    </tbody>
+                </table>
+                <button type="button" class="boton-limpiar" onclick="limpiarHistorial()">Borrar Historial</button>
+            </div>
+        </section>
+
+        <section id="sec-tabla" class="seccion-pagina">
+            <div class="layout-tabla-iva">
+
+                <div class="tarjeta-cristal tarjeta-productos">
+                    <div class="cabecera-formulario" style="margin-bottom:15px;">
+                        <h2>Guardar Productos</h2>
+                    </div>
+                    <div class="grupo-entrada">
+                        <input type="text" id="txtNombreProducto" class="entrada-neon"
+                            placeholder="Nombre del producto">
+                    </div>
+                    <div class="grupo-entrada">
+                        <select id="selIvaProducto" class="entrada-neon">
+                            <option value="0">0% — Exento</option>
+                            <option value="0.05"> 5% - Prueba</option>
+                            <option value="0.08">8% - Tarifa Diferenciada</option>
+                            <option value="0.15">15% — Tarifa General</option>
+                        </select>
+                    </div>
+                    <div id="errProducto" class="mensaje-error"></div>
+                    <button type="button" class="boton-primario" style="margin-bottom:20px;"
+                        onclick="guardarProducto()">
+                        GUARDAR PRODUCTO
+                    </button>
+                    <div class="separador-neon" style="margin-bottom:15px;"></div>
+
+                    <div class="cabecera-formulario">
+                        <h2>Catálogo</h2>
+                        <p>Base de datos tributaria.</p>
+                    </div>
+
+                    <div class="grupo-entrada">
+                        <input type="text" id="txtBusquedaProducto" class="entrada-neon"
+                            placeholder="Buscar producto..." oninput="buscarProducto()">
+                    </div>
+
+                    <ul id="listaProductos" class="lista-productos">
+                    </ul>
+                </div>
+
+                <div class="tarjeta-cristal tarjeta-detalle-producto">
+                    <div id="panelVacio" class="panel-vacio">
+                        <div class="icono-vacio" style="font-family: sans-serif; font-size: 2.5rem; font-weight: 300;">[
+                            i ]</div>
+                        <h3>Selecciona un ítem</h3>
+                        <p>Haz clic en el catálogo para ver información fiscal y definir cantidades.</p>
+                    </div>
+
+                    <div id="panelDetalle" class="panel-detalle" style="display:none;">
+                        <div class="detalle-encabezado">
+                            <span id="detalleBadge" class="badge-iva"></span>
+                            <h2 id="detalleNombre" class="texto-brillante"></h2>
+                            <p id="detalleCategoria" class="detalle-categoria"></p>
+                        </div>
+
+                        <div class="detalle-grid">
+                            <div class="detalle-stat">
+                                <span class="stat-label">Tarifa Regulada</span>
+                                <span id="detalleTarifa" class="stat-valor"></span>
+                            </div>
+                        </div>
+                        <h4 class="subtitulo-detalle">Detalles de Cliente</h4>
+                        <div id="panelDatosCliente">
+                            <div class="grupo-entrada">
+                                <input type="text" id="txtClienteNombreDetalle" class="entrada-neon"
+                                    placeholder="Nombre y Apellido" oninput="actualizarClienteEnFactura()">
+                            </div>
+                            <div class="grupo-entrada">
+                                <input type="email" id="txtClienteCorreoDetalle" class="entrada-neon"
+                                    placeholder="Correo" oninput="actualizarClienteEnFactura()">
+                            </div>
+                            <div class="grupo-entrada">
+                                <input type="number" id="txtClienteCedulaDetalle" class="entrada-neon"
+                                    placeholder="Cédula" oninput="actualizarClienteEnFactura()">
+                            </div>
+                        </div>
+                        <div class="separador-neon"></div>
+
+                        <h4 class="subtitulo-detalle">Detalles de Inserción</h4>
+
+                        <div class="grupo-entrada">
+                            <label>Precio unitario ($)</label>
+                            <input type="number" id="detallePrecio" class="entrada-neon" placeholder="Ej: 100.00"
+                                step="0.01" min="0.01" max="100000" oninput="simularDetallesDelProducto()">
+                        </div>
+                        <div class="grupo-entrada">
+                            <label>Cantidad</label>
+                            <input type="number" id="detalleCantidad" class="entrada-neon" placeholder="Ej: 2" step="1"
+                                min="1" max="100000" value="1" oninput="simularDetallesDelProducto()">
+                        </div>
+
+                        <div class="mini-resultado">
+                            <div class="mini-fila">
+                                <span>Subtotal Neto</span>
+                                <span id="simSubtotal">$0.00</span>
+                            </div>
+                            <div class="mini-fila">
+                                <span id="simLabelIva">IVA Aplicado</span>
+                                <span id="simIva">$0.00</span>
+                            </div>
+                            <div class="mini-fila mini-total">
+                                <span>Monto a Agregar</span>
+                                <span id="simTotal">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div id="errDetalleProducto" class="mensaje-error"></div>
+                        <button type="button" class="boton-primario" style="margin-top: 15px;"
+                            onclick="agregarAFactura()">Agregar a Factura</button>
+
+                        <div class="separador-neon"></div>
+                        <h4 class="subtitulo-detalle">Descripción Legal</h4>
+                        <p id="detalleDescripcion" class="texto-descripcion"></p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-cristal tarjeta-factura">
+                    <div class="cabecera-formulario">
+                        <h2>Factura en Curso</h2>
+
+                        <p>Constructor dinámico de comprobante.</p>
+                    </div>
+                    <div id="panelClienteFactura" style="margin-bottom:15px;">
+                        <h4 class="subtitulo-detalle" style="margin-bottom:10px;">Datos del cliente</h4>
+                        <div class="mini-resultado">
+                            <div class="mini-fila">
+                                <span>Nombre y Apellido</span>
+                                <span id="facClienteNombre" style="color:var(--tm-acento);">—</span>
+                            </div>
+                            <div class="mini-fila">
+                                <span>Correo</span>
+                                <span id="facClienteCorreo" style="color:var(--tm-acento);">—</span>
+                            </div>
+                            <div class="mini-fila">
+                                <span>Cédula</span>
+                                <span id="facClienteCedula" style="color:var(--tm-acento);">—</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tarjeta-cristal tarjeta-factura">
+                        <div id="facturaImprimible">
+                            <div
+                                style="border-bottom: 2px solid var(--tm-acento); margin-bottom: 15px; padding-bottom: 10px;">
+                                <h2 id="facEmpresa" style="color:var(--tm-acento);">NOMBRE DE EMPRESA</h2>
+                                <p>RUC: <span id="facRuc">1234567890001</span></p>
+                                <p>Dirección: Av. Principal y Calle Secundaria</p>
+                                <p>Factura N°: <span id="facSecuencial">001-001-000000001</span></p>
+                                <p>Fecha: <span id="facFecha"></span></p>
+                            </div>
+                            <div class="lista-factura-contenedor">
+                                <table class="tabla-cristal tabla-factura">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-cant">Cant.</th>
+                                            <th class="col-det">Detalle</th>
+                                            <th class="col-vunit">V. Unit</th>
+                                            <th class="col-vtot">V. Total</th>
+                                            <th class="col-btn"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cuerpoFactura">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="resumen-factura">
+                                <div class="mini-fila"><span>Subtotal Gravado (15%):</span><span
+                                        id="facSubtotal15">$0.00</span>
+                                </div>
+                                <div class="mini-fila"><span>Subtotal Exento (0%):</span><span
+                                        id="facSubtotal0">$0.00</span>
+                                </div>
+                                <div class="mini-fila"><span>IVA Calculado (15%):</span><span id="facIva">$0.00</span>
+                                </div>
+                                <div class="mini-fila mini-total"><span>TOTAL GENERAL:</span><span
+                                        id="facTotal">$0.00</span>
+                                </div>
+                                <div id="errGuardarFactura" class="mensaje-error"></div>
+                                <button type="button" class="boton-primario" style="margin-top:15px;"
+                                    onclick="generarFacturaCliente()">
+                                    Generar Factura
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contenedor-historial" style="width:90%; max-width:1250px; margin:40px auto;">
+                <h2 class="subtitulo-seccion">Historial de Clientes</h2>
+                <div style="overflow-x:auto;">
+                    <table class="tabla-cristal">
+                        <thead>
+                            <input type="text" id="txtBusquedaCliente" class = "entrada-neon" oninput="buscarCedula()">
+                            <tr>
+                                <th>ID</th>
+                                <th>Num cédula</th>
+                                <th>Nombre y apellido</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpoClientes"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="sec-fundamentos" class="seccion-pagina">
+            <div class="tarjeta-cristal tarjeta-formulario">
+                <div class="cabecera-formulario">
+                    <h2>Fundamentos Matemáticos</h2>
+                    <p>Base analítica de los cálculos tributarios implementados en el sistema.</p>
+                </div>
+
+                <div class="caja-formula">
+                    <h3>Cálculo Directo de IVA</h3>
+                    <p>Fórmula: Monto_IVA = Base_Imponible * (Porcentaje_IVA / 100)</p>
+                    <p>Fórmula: Total = Base_Imponible + Monto_IVA</p>
+                </div>
+
+                <div class="caja-formula">
+                    <h3>Desglose de IVA (Cálculo Inverso)</h3>
+                    <p>Fórmula: Base_Imponible = Total / (1 + (Porcentaje_IVA / 100))</p>
+                    <p>Fórmula: Monto_IVA = Total - Base_Imponible</p>
+                </div>
+
+                <div class="caja-formula">
+                    <h3>Retenciones en la Fuente</h3>
+                    <p>Fórmula: Valor_Retenido = Base_Imponible * (Porcentaje_Retención / 100)</p>
+                    <p>Fórmula: Valor_Neto = (Base_Imponible + Monto_IVA) - Total_Retenciones</p>
+                </div>
+
+                <div class="caja-formula">
+                    <h3>Intereses y Multas por Mora</h3>
+                    <p>Fórmula: Multa = Impuesto * (Porcentaje_Multa / 100) * Meses_Atraso</p>
+                    <p>Fórmula: Interés = Impuesto * (Tasa_Interés / 100) * Meses_Atraso</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-evaluacion" class="seccion-pagina">
+            <div class="tarjeta-cristal tarjeta-formulario" style="max-width: 800px;">
+                <div class="cabecera-formulario">
+                    <h2>Evaluación de Conocimientos</h2>
+                    <p>Demuestra tu dominio sobre facturación, impuestos y retenciones.</p>
+                </div>
+
+                <form id="formEvaluacion">
+                    <div class="grupo-entrada">
+                        <label>1. ¿Cuál es la tarifa general del IVA vigente utilizada en este sistema?</label>
+                        <div class="radio-grupo">
+                            <label class="radio-opcion"><input type="radio" name="preg1" value="0"> 0%</label>
+                            <label class="radio-opcion"><input type="radio" name="preg1" value="12"> 12%</label>
+                            <label class="radio-opcion"><input type="radio" name="preg1" value="15"> 15%</label>
+                        </div>
+                    </div>
+
+                    <div class="grupo-entrada">
+                        <label>2. ¿Sobre qué valor se calcula directamente el porcentaje del IVA?</label>
+                        <div class="radio-grupo">
+                            <label class="radio-opcion"><input type="radio" name="preg2" value="descuento">
+                                Descuento</label>
+                            <label class="radio-opcion"><input type="radio" name="preg2" value="base"> Base
+                                Imponible</label>
+                            <label class="radio-opcion"><input type="radio" name="preg2" value="total"> Total a
+                                Pagar</label>
+                        </div>
+                    </div>
+
+                    <div class="grupo-entrada">
+                        <label>3. ¿Qué comprobante está validado digitalmente por la administración tributaria?</label>
+                        <div class="radio-grupo">
+                            <label class="radio-opcion"><input type="radio" name="preg3" value="fisica"> Factura
+                                Física</label>
+                            <label class="radio-opcion"><input type="radio" name="preg3" value="electronica"> Factura
+                                Electrónica</label>
+                            <label class="radio-opcion"><input type="radio" name="preg3" value="nota"> Nota de Venta
+                                Rápida</label>
+                        </div>
+                    </div>
+
+                    <div class="grupo-entrada">
+                        <label>4. Persona o empresa obligada por ley a retener el impuesto al momento del pago:</label>
+                        <div class="radio-grupo">
+                            <label class="radio-opcion"><input type="radio" name="preg4" value="agente"> Agente de
+                                Retención</label>
+                            <label class="radio-opcion"><input type="radio" name="preg4" value="consumidor"> Consumidor
+                                Final</label>
+                            <label class="radio-opcion"><input type="radio" name="preg4" value="auditor"> Auditor
+                                Externo</label>
+                        </div>
+                    </div>
+
+                    <div class="grupo-entrada">
+                        <label>5. ¿A qué tarifa de IVA están sujetos los medicamentos de uso humano?</label>
+                        <div class="radio-grupo">
+                            <label class="radio-opcion"><input type="radio" name="preg5" value="0"> 0%</label>
+                            <label class="radio-opcion"><input type="radio" name="preg5" value="5"> 5%</label>
+                            <label class="radio-opcion"><input type="radio" name="preg5" value="15"> 15%</label>
+                        </div>
+                    </div>
+
+                    <div class="separador-neon" style="margin: 30px 0;"></div>
+
+                    <div class="grupo-entrada">
+                        <label>6. Reseña de la plataforma (Opcional)</label>
+                        <textarea id="txtResena" class="entrada-neon"
+                            placeholder="Escribe aquí qué cambiarías o mejorarías de este sistema..."></textarea>
+                    </div>
+
+                    <div id="errEvaluacion" class="mensaje-error"></div>
+                    <button type="button" class="boton-primario" onclick="calificarEvaluacion()">Enviar
+                        Respuestas</button>
+                </form>
+
+                <div id="resultadoEvaluacion" class="panel-resultado" style="text-align: center;">
+                    <p>Evaluación procesada correctamente.</p>
+                    <h3>Tu Calificación: <span id="lblNotaFinal">0 / 100</span></h3>
+                </div>
+            </div>
+
+            <div class="tarjeta-cristal contenedor-historial"
+                style="max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div class="cabecera-formulario">
+                    <h2>Registro de Evaluaciones</h2>
+                    <p>Historial de calificaciones obtenidas por los usuarios.</p>
+                </div>
+                <table class="tabla-cristal" id="tablaEvaluaciones">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Calificación</th>
+                            <th>Reseña / Comentarios</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoEvaluaciones">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="overlayLogin" class="capa-modal visible">
+        <div class="caja-modal">
+            <h2 class="texto-brillante" style="text-align: center; font-size: 2rem; margin-bottom: 10px;">Acceso al
+                Sistema</h2>
+            <p style="color: #94a3b8; margin-bottom: 30px; text-align: center; font-size: 0.95rem;">Para acceder a los
+                módulos de simulación y rendir la evaluación obligatoria, por favor identifícate.</p>
+
+            <div class="grupo-entrada">
+                <label>Nombre y Apellido</label>
+                <input type="text" id="txtNombreLogin" class="entrada-neon" placeholder="Escribe tu nombre completo...">
+                <div class="switch-container" id="switchContainer">
+                    <span>¿Eres una empresa?</span>
+                    <label class="switch">
+                        <input type="checkbox" id="esEmpresa" onchange="toggleSectionEmpresaLogin()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <section id="sectionEmpresaLogin" style="display:none;">
+                    <label>Nombre de la Empresa</label>
+                    <input type="text" id="txtNombreEmpresa" class="entrada-neon" placeholder="Nombre de la empresa...">
+                    <label>RUC de la Empresa</label>
+                    <input type="number" id="txtRucEmpresa" class="entrada-neon" placeholder="RUC de la empresa...">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="txtCorreoElectronico" class="entrada-neon"
+                        placeholder="Correo electrónico de la empresa...">
+                    <label>Teléfono</label>
+                    <input type="tel" id="txtTelefono" class="entrada-neon" placeholder="Teléfono de la empresa...">
+                    <label>Dirección</label>
+                    <input type="text" id="txtDireccion" class="entrada-neon" placeholder="Dirección de la empresa...">
+                </section>
+            </div>
+
+            <div id="errLogin" class="mensaje-error"></div>
+            <button type="button" class="boton-primario" onclick="iniciarSesion()" style="margin-top: 15px;">Ingresar de
+                Forma Segura</button>
+        </div>
+    </div>
+
+    <div id="modalInformacion" class="capa-modal">
+        <div class="caja-modal">
+            <h2 id="tituloModal" class="texto-brillante">Titulo</h2>
+            <div id="contenidoModal" class="cuerpo-modal"></div>
+            <button type="button" class="boton-cerrar-modal" onclick="cerrarModalInformacion()">Entendido</button>
+        </div>
+    </div>
+    <div id="modalFacturasCliente" class="capa-modal">
+        <div class="caja-modal">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 class="texto-brillante" style="font-size:1.4rem;">Detalles del cliente</h2>
+                <button type="button" style="background:transparent; border:none; color:var(--tm-acento);
+                           font-size:1.5rem; cursor:pointer; padding:4px 10px;"
+                    onclick="cerrarModalFacturasCliente()">&#8592;</button>
+            </div>
+            <div id="contenidoModalFacturas" class="cuerpo-modal">
+                <!-- Se llena con verFacturasCliente() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Detalle de una factura específica -->
+    <div id="modalDetalleFactura" class="capa-modal">
+        <div class="caja-modal">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 id="tituloModalDetalle" class="texto-brillante" style="font-size:1.4rem;">
+                    Factura
+                </h2>
+                <button type="button" style="background:transparent; border:none; color:var(--tm-acento);
+                           font-size:1.5rem; cursor:pointer; padding:4px 10px;"
+                    onclick="cerrarModalDetalleFactura()">&#8592;</button>
+            </div>
+            <div id="contenidoModalDetalle" class="cuerpo-modal">
+                <!-- Se llena con abrirDetalleFactura() -->
+            </div>
+        </div>
+    </div>
+    <div id="modalDescargarFactura" class="capa-modal">
+        <div class="caja-modal">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 id="tituloModalDescargarFactura" class="texto-brillante" style="font-size:1.4rem;">
+                    Descargar Factura
+                </h2>
+                <button type="button" style="background:transparent; border:none; color:var(--tm-acento);
+                           font-size:1.5rem; cursor:pointer; padding:4px 10px;"
+                    onclick="cerrarModalDescargarFactura()">&#8592;</button>
+            </div>
+            <p style="text-align: center;">Factura Creada con exito</p>
+            <button class="boton-primario" style="margin-top:15px; width:200px; display:block; margin-left:auto;
+            margin-right:auto;">Imprimir Factura</button>
+            <button onclick="exportarFacturaPDF();" class="boton-primario" style="margin-top:15px; width:200px; display:block; margin-left:auto;
+            margin-right:auto;">Descargar PDF</button>
+        </div>
+    </div>
+
+
+    <div id="contenedorPaleta">
+        <div id="menuColores" class="menu-colores oculto">
+            <button class="btn-color" data-acento="#00c8d7" data-brillo="#00f0ff" data-oscuro="#0080ff"
+                style="background:#00c8d7" title="Celeste (original)" onclick="aplicarColorPaleta(this)"></button>
+
+            <button class="btn-color" data-acento="#ef4444" data-brillo="#ff6b6b" data-oscuro="#991b1b"
+                style="background:#ef4444" title="Rojo" onclick="aplicarColorPaleta(this)"></button>
+
+            <button class="btn-color" data-acento="#eab308" data-brillo="#fde047" data-oscuro="#ca8a04"
+                style="background:#eab308" title="Amarillo" onclick="aplicarColorPaleta(this)"></button>
+
+            <button class="btn-color" data-acento="#22c55e" data-brillo="#4ade80" data-oscuro="#16a34a"
+                style="background:#22c55e" title="Verde" onclick="aplicarColorPaleta(this)"></button>
+        </div>
+
+        <button id="btnPaleta" onclick="toggleMenuColores()" title="Cambiar color">
+            🎨
+        </button>
+    </div>
+
+    <button type="button" id="btnTema" onclick="cambiarTema()">
+        &#9790;
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="Facturacion.js"></script>
+</body>
+
+</html>
